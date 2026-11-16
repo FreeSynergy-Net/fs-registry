@@ -149,7 +149,7 @@ A message above the reader's limit ends the whole connection with all its capabi
 * **fs-contacts**: index `kind`, `email`, `phone` are read by the hub's proposals; they should be documented as part of the hub contract (the hub knows these index keys). Better: a generic "identity keys" index convention in `data/<domain>/standards.md`.
 * **fs-calendar**: `Event` participants are only e-mail strings; a hub-level "participant -> contact" resolution would need a convention for which index key carries identity (`participant_email` vs contacts' `email`).
 * **`fs-interfaces`**: `proposals` belongs on `Session` in `hub.capnp`, see above. Since v0.43.0 `rpc` is on `fs-objects` v0.4.0, as the hub is.
-* **`fs-history-hub`**: pins hub v0.2.0. At the next bump `DEFAULT_MAX_BATCH` and the "too large" advice can go, `pull_envelopes` fits it (it reads only summaries), and `tests/large_batch.rs` expects the old failure.
+* **`fs-activity-hub`**: pins hub v0.2.0. At the next bump `DEFAULT_MAX_BATCH` and the "too large" advice can go, `pull_envelopes` fits it (it reads only summaries), and `tests/large_batch.rs` expects the old failure.
 * **ADR 0019** names the socket but not the contract version negotiation: 0.1 requires an exact match for now.
 
 ## Open questions
