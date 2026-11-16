@@ -48,7 +48,9 @@ impl Daemon {
             }),
             Err(_) => match thread.join() {
                 Ok(Err(e)) => Err(e),
-                _ => Err(Error::Invalid("hub thread ended before it listened".into())),
+                _ => Err(Error::Invalid(
+                    "registry thread ended before it listened".into(),
+                )),
             },
         }
     }
@@ -75,7 +77,7 @@ impl Daemon {
         match self.thread.take() {
             Some(t) => t
                 .join()
-                .unwrap_or_else(|_| Err(Error::Invalid("hub thread panicked".into()))),
+                .unwrap_or_else(|_| Err(Error::Invalid("registry thread panicked".into()))),
             None => Ok(()),
         }
     }

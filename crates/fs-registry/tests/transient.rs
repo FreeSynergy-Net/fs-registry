@@ -42,7 +42,10 @@ async fn what_was_applied_is_acknowledged_before_it_stops() {
     let owner = session(&env, notes_manifest("owner")).await;
     let reader = session(&env, notes_manifest("reader")).await;
     let same = note("same", 8);
-    reader_store.put(same.clone(), "hub:owner").await.unwrap();
+    reader_store
+        .put(same.clone(), "registry:owner")
+        .await
+        .unwrap();
     owner_store.put(same, "ada").await.unwrap();
     owner_store.put(note("next", 8), "ada").await.unwrap();
     owner.sync_once(owner_store.as_ref()).await.unwrap();

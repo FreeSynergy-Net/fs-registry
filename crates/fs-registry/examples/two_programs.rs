@@ -13,9 +13,9 @@ use fs_registry_client::{HubStatus, Manifest, connect_at};
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let dir = tempfile::tempdir()?;
-    let socket = dir.path().join("run/freesynergy/hub.sock");
-    let hub = Daemon::spawn(Config::new(&socket, dir.path().join("hub")))?;
-    println!("hub listening on {}", socket.display());
+    let socket = dir.path().join("run/freesynergy/registry.sock");
+    let hub = Daemon::spawn(Config::new(&socket, dir.path().join("registry")))?;
+    println!("registry listening on {}", socket.display());
 
     // Program A: contacts, own database. It creates a contact.
     let a_store = Arc::new(TursoStore::open(dir.path().join("contacts.db")).await?);
@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let hub_store = hub.core().store();
     println!(
-        "hub holds {} Profile(s) and {} Event(s)",
+        "registry holds {} Profile(s) and {} Event(s)",
         hub_store.count(&Query::new().of_type("Profile")).await?,
         hub_store.count(&Query::new().of_type("Event")).await?
     );
@@ -75,7 +75,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         known.iter().map(|o| &o.envelope.name).collect::<Vec<_>>()
     );
     println!(
-        "hub proposals: {} (nothing sensitive is ever proposed)",
+        "registry proposals: {} (nothing sensitive is ever proposed)",
         a.proposals().await?.len()
     );
     for p in a.programs().await? {

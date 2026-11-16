@@ -44,7 +44,7 @@ pub(super) async fn open_marks(
             "application/json",
             serde_json::Value::Null,
         );
-        state.put(marker, "hub").await?;
+        state.put(marker, "registry").await?;
     }
     Ok(marks)
 }

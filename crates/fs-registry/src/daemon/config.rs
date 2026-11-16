@@ -7,9 +7,9 @@ use std::path::PathBuf;
 /// Where the hub keeps its socket and data.
 #[derive(Clone, Debug)]
 pub struct Config {
-    /// Unix socket, default `$XDG_RUNTIME_DIR/freesynergy/hub.sock`.
+    /// Unix socket, default `$XDG_RUNTIME_DIR/freesynergy/registry.sock`.
     pub socket: PathBuf,
-    /// Directory of `objects.db` and `state.db`, default `$XDG_DATA_HOME/freesynergy/hub`.
+    /// Directory of `objects.db` and `state.db`, default `$XDG_DATA_HOME/freesynergy/registry`.
     pub data_dir: PathBuf,
 }
 
@@ -30,7 +30,7 @@ impl Config {
             .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".local/share")))?;
         Some(Self {
             socket,
-            data_dir: data.join("freesynergy").join("hub"),
+            data_dir: data.join("freesynergy").join("registry"),
         })
     }
 }

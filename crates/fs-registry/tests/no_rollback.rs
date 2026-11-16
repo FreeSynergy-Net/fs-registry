@@ -11,7 +11,7 @@ fn with_text(mut o: StoredObject, text: &str) -> StoredObject {
     o
 }
 
-/// The state a crash leaves between applying and marking: `hub:*` entries of an old version, unsynced.
+/// The state a crash leaves between applying and marking: `registry:*` entries of an old version, unsynced.
 #[tokio::test]
 async fn a_crash_between_apply_and_mark_rolls_nothing_back() {
     let env = Env::start();
@@ -20,7 +20,7 @@ async fn a_crash_between_apply_and_mark_rolls_nothing_back() {
     let reader = session(&env, notes_manifest("reader")).await;
     let o = with_text(note("n", 8), "v1");
     let id = o.envelope.id;
-    reader_store.put(o.clone(), "hub:owner").await.unwrap();
+    reader_store.put(o.clone(), "registry:owner").await.unwrap();
 
     owner_store.put(o.clone(), "ada").await.unwrap();
     owner_store.put(with_text(o, "v2"), "ada").await.unwrap();
@@ -48,7 +48,7 @@ async fn a_crash_between_apply_and_mark_rolls_nothing_back() {
     assert_eq!(reader_store.activities(&unsynced).await.unwrap().len(), 0);
 }
 
-/// No crash needed: a `hub:*` entry behind the program's own unsynced entry.
+/// No crash needed: a `registry:*` entry behind the program's own unsynced entry.
 #[tokio::test]
 async fn a_hub_entry_behind_an_own_entry_stays_home_and_the_own_one_goes() {
     let env = Env::start();
@@ -61,7 +61,7 @@ async fn a_hub_entry_behind_an_own_entry_stays_home_and_the_own_one_goes() {
     reader_store.put(own, "me").await.unwrap();
     let o = with_text(note("n", 8), "v1");
     let id = o.envelope.id;
-    reader_store.put(o.clone(), "hub:owner").await.unwrap();
+    reader_store.put(o.clone(), "registry:owner").await.unwrap();
     owner_store.put(with_text(o, "v2"), "ada").await.unwrap();
     owner.sync_once(owner_store.as_ref()).await.unwrap();
 

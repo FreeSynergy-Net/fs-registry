@@ -31,7 +31,7 @@ async fn two_concurrent_edits_end_the_same_everywhere() {
 
     let hub = env.hub().core().store();
     for (name, text) in [
-        ("hub", hub.get(id).await.unwrap().unwrap().content),
+        ("registry", hub.get(id).await.unwrap().unwrap().content),
         ("a", a_store.get(id).await.unwrap().unwrap().content),
         ("b", b_store.get(id).await.unwrap().unwrap().content),
     ] {

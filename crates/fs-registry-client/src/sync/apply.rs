@@ -1,7 +1,7 @@
 //! Applying one pulled activity to the program's store.
 //!
 //! Pattern: Command (executed) — create/update/delete/log-only with the actor written as
-//! `hub:<program>`; identical content is skipped (idempotent). What the hub blanks at delivery stays
+//! `registry:<program>`; identical content is skipped (idempotent). What the hub blanks at delivery stays
 //! as this store has it: an update from a reader must not take the owner's values away. And what is
 //! marked sensitive here stays as it is: a mark is this program's own, nothing pulled undoes it.
 
@@ -11,14 +11,14 @@ use fs_registry_proto::{is_redacted, keep_held_back, same_content};
 use crate::{Error, Result};
 
 /// Log entries written by [`apply`] start with this. They came from the hub, so they never go back.
-pub(super) const HUB_ACTOR_PREFIX: &str = "hub:";
+pub(super) const REGISTRY_ACTOR_PREFIX: &str = "registry:";
 
 /// Apply one pulled activity to the program's store. Returns whether that changed the store.
 pub(super) async fn apply(store: &dyn Store, a: Activity) -> Result<bool> {
     if is_redacted(&a) {
         return Ok(false); // no state, no deletion: this store keeps what it has
     }
-    let actor = format!("{HUB_ACTOR_PREFIX}{}", a.actor);
+    let actor = format!("{REGISTRY_ACTOR_PREFIX}{}", a.actor);
     if a.payload.is_null() && a.kind == ActivityKind::Delete {
         return delete(store, a.object, &actor).await;
     }

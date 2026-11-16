@@ -14,7 +14,7 @@ async fn without_a_hub_programs_keep_working() {
     let dir = tempfile::tempdir().unwrap();
     let store = Arc::new(TursoStore::open(dir.path().join("c.db")).await.unwrap());
     let contacts = PeopleRepo::new(store.clone(), "contacts");
-    let socket = dir.path().join("hub.sock");
+    let socket = dir.path().join("registry.sock");
 
     // No socket at all.
     let status = connect_at(&socket, contacts_manifest("contacts"))
@@ -35,7 +35,7 @@ async fn without_a_hub_programs_keep_working() {
         .await
         .unwrap();
     assert_eq!(unsynced.len(), 1);
-    assert!(offer_install().contains("hub"));
+    assert!(offer_install().contains("registry"));
 
     // A stale socket file (nobody listening) is Absent too.
     drop(std::os::unix::net::UnixListener::bind(&socket).unwrap());
@@ -48,12 +48,12 @@ async fn without_a_hub_programs_keep_working() {
     ));
 
     // The hub shows up later: the program hands over its log.
-    let hub = Daemon::spawn(Config::new(&socket, dir.path().join("hub"))).unwrap();
+    let hub = Daemon::spawn(Config::new(&socket, dir.path().join("registry"))).unwrap();
     let HubStatus::Connected(s) = connect_at(&socket, contacts_manifest("contacts"))
         .await
         .unwrap()
     else {
-        panic!("hub is running")
+        panic!("registry is running")
     };
     let r = s.sync_once(store.as_ref()).await.unwrap();
     assert_eq!(r.accepted, 1);

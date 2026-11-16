@@ -9,7 +9,7 @@ pub enum Error {
     #[error("no hub is listening")]
     NoHub,
     /// The connection (RPC thread) is gone.
-    #[error("hub connection closed")]
+    #[error("registry connection closed")]
     Closed,
     /// RPC failure.
     #[error("rpc: {0}")]

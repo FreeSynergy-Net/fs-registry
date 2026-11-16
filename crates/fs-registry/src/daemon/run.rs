@@ -19,7 +19,7 @@ pub(super) async fn run(
     if let Some(tx) = ready {
         let _ = tx.send(core.clone());
     }
-    tracing::info!("hub listening on {}", config.socket.display());
+    tracing::info!("registry listening on {}", config.socket.display());
     server::serve(core.clone(), listener, config.socket.clone(), shutdown).await;
     core.flush().await?;
     let _ = std::fs::remove_file(&config.socket);

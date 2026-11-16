@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 use crate::worker;
 use crate::{Error, HubStatus, Manifest, Result};
 
-/// Look for the hub at the default socket (`$XDG_RUNTIME_DIR/freesynergy/hub.sock`) and register.
+/// Look for the hub at the default socket (`$XDG_RUNTIME_DIR/freesynergy/registry.sock`) and register.
 pub async fn connect(manifest: Manifest) -> Result<HubStatus> {
     match fs_registry_proto::default_socket_path() {
         Some(path) => connect_at(&path, manifest).await,

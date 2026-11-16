@@ -59,7 +59,7 @@ impl CursorRepository for StoreCursors {
         env.id = st.object_id;
         let obj = StoredObject::new(env, STATE_CONTENT_TYPE, serde_json::to_value(st)?)
             .with_index("program", st.manifest.program.clone());
-        let act = self.state.put(obj, "hub").await?;
+        let act = self.state.put(obj, "registry").await?;
         // The state store has no peer; keep its log small.
         self.state.mark_synced(act.id).await?;
         // A save comes before every answer to a push; compacting that often is what is slow.

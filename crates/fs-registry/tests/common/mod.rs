@@ -27,7 +27,7 @@ impl Env {
         }
     }
     pub fn socket(&self) -> std::path::PathBuf {
-        self.dir.path().join("run/freesynergy/hub.sock")
+        self.dir.path().join("run/freesynergy/registry.sock")
     }
     pub fn hub(&self) -> &Daemon {
         self.hub.as_ref().unwrap()
@@ -47,8 +47,8 @@ impl Env {
 
 pub fn config(dir: &tempfile::TempDir) -> Config {
     Config::new(
-        dir.path().join("run/freesynergy/hub.sock"),
-        dir.path().join("hub-data"),
+        dir.path().join("run/freesynergy/registry.sock"),
+        dir.path().join("registry-data"),
     )
 }
 

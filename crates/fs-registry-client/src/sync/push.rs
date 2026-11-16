@@ -3,7 +3,7 @@
 //! Pattern: Iterator-style batching — takes the log in small batches, marks each synced once the hub
 //! acknowledged it; `HubSession::push` cuts a batch to what fits a message. What goes depends on the
 //! object as it is now, not as it was when the entry was written:
-//! * what came from the hub (`hub:*`) never goes, and is marked all the same. This is what stops an
+//! * what came from the hub (`registry:*`) never goes, and is marked all the same. This is what stops an
 //!   echo: after a crash, or behind a foreign entry, such an entry may still be unsynced, and pushing it
 //!   would roll the hub back to an old version.
 //! * of an object marked sensitive now, a change goes as stubs only, so the history from before the mark
@@ -20,7 +20,7 @@
 use fs_objects::{Activity, ActivityFilter, Store};
 use fs_registry_proto::{ScanSize, images_of};
 
-use super::apply::HUB_ACTOR_PREFIX;
+use super::apply::REGISTRY_ACTOR_PREFIX;
 use super::redacted::with_current_copy;
 use super::report::SyncReport;
 use crate::push_plan::stub_images;
@@ -91,7 +91,7 @@ pub(super) async fn push_all(
         let mut send = Vec::with_capacity(batch.len());
         for a in batch {
             scan.saw(&a.payload);
-            if a.actor.starts_with(HUB_ACTOR_PREFIX) {
+            if a.actor.starts_with(REGISTRY_ACTOR_PREFIX) {
                 continue;
             }
             match what_may_go(store, a).await? {

@@ -32,19 +32,19 @@ pub struct Env {
 impl Env {
     pub fn start() -> Self {
         let dir = tempfile::Builder::new()
-            .prefix("hub-e2e-")
+            .prefix("registry-e2e-")
             .tempdir_in(base())
             .unwrap();
         let config = Config::new(
-            dir.path().join("run/freesynergy/hub.sock"),
-            dir.path().join("hub-data"),
+            dir.path().join("run/freesynergy/registry.sock"),
+            dir.path().join("registry-data"),
         );
         let hub = Daemon::spawn(config).unwrap();
         Self { dir, hub }
     }
 
     pub fn socket(&self) -> std::path::PathBuf {
-        self.dir.path().join("run/freesynergy/hub.sock")
+        self.dir.path().join("run/freesynergy/registry.sock")
     }
 
     /// A store of a program. Sensitive objects are allowed without encryption, as a program's own

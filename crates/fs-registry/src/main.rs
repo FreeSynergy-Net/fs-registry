@@ -16,7 +16,7 @@ fn main() {
             "--data" => data = args.next(),
             "-h" | "--help" => {
                 println!(
-                    "fs-registry [--socket PATH] [--data DIR]\nDefaults: $XDG_RUNTIME_DIR/freesynergy/hub.sock, $XDG_DATA_HOME/freesynergy/hub"
+                    "fs-registry [--socket PATH] [--data DIR]\nDefaults: $XDG_RUNTIME_DIR/freesynergy/registry.sock, $XDG_DATA_HOME/freesynergy/registry"
                 );
                 return;
             }

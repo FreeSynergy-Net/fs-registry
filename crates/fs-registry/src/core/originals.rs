@@ -18,7 +18,7 @@ use crate::Result;
 
 const ORIGINAL_TYPE: &str = "OriginalTime";
 const ORIGINAL_CONTENT_TYPE: &str = "application/json";
-const ORIGINAL_ACTOR: &str = "hub";
+const ORIGINAL_ACTOR: &str = "registry";
 
 /// The time a program did what a hub log entry records.
 #[async_trait]

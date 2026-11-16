@@ -25,7 +25,7 @@ use crate::Result;
 
 const MARKED_TYPE: &str = "MarkedRemoval";
 const MARKED_CONTENT_TYPE: &str = "application/json";
-const MARKED_ACTOR: &str = "hub";
+const MARKED_ACTOR: &str = "registry";
 
 /// How far a removal reaches in the hub's log.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]

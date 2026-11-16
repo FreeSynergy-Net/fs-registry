@@ -24,8 +24,8 @@ fn peak_bytes(hub: &Hub) -> u64 {
 #[tokio::test]
 async fn a_page_of_large_entries_does_not_read_the_whole_scan() {
     let dir = tempfile::tempdir().unwrap();
-    let socket = dir.path().join("hub.sock");
-    let data = dir.path().join("hub-data");
+    let socket = dir.path().join("registry.sock");
+    let data = dir.path().join("registry-data");
 
     let hub = start(&socket, &data);
     let writer = connect(&socket, "wiki").await;

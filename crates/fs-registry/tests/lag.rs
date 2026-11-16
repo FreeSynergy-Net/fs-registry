@@ -69,21 +69,21 @@ fn start_hub(
 async fn session(socket: &std::path::Path, name: &str) -> HubSession {
     match connect_at(socket, notes_manifest(name)).await.unwrap() {
         HubStatus::Connected(s) => s,
-        HubStatus::Absent => panic!("hub should be there"),
+        HubStatus::Absent => panic!("registry should be there"),
     }
 }
 
 #[tokio::test]
 async fn a_lagging_feed_ends_with_ended_and_pull_catches_up() {
     let dir = tempfile::tempdir().unwrap();
-    let socket = dir.path().join("run/freesynergy/hub.sock");
+    let socket = dir.path().join("run/freesynergy/registry.sock");
     let (entered_tx, entered) = channel();
     let (release, release_rx) = channel();
     let engine = Arc::new(HoldTheThread {
         entered: entered_tx,
         release: Mutex::new(release_rx),
     });
-    let (core, _stop) = start_hub(dir.path().join("hub-data"), socket.clone(), engine);
+    let (core, _stop) = start_hub(dir.path().join("registry-data"), socket.clone(), engine);
 
     let reader = session(&socket, "reader").await;
     let mut feed = reader.subscribe().await.unwrap();

@@ -14,7 +14,7 @@ const OLD: &str = "old secret text";
 async fn a_missing_list_stops_the_hub_from_starting() {
     let mut env = Env::start();
     env.hub.take().unwrap().stop().unwrap();
-    let marks = env.dir.path().join("hub-data/marks.db");
+    let marks = env.dir.path().join("registry-data/marks.db");
     assert!(marks.exists());
     std::fs::remove_file(&marks).unwrap();
     let refused = Daemon::spawn(config(&env.dir));
@@ -28,7 +28,7 @@ async fn a_missing_list_stops_the_hub_from_starting() {
 #[tokio::test]
 async fn over_an_older_log_every_deleted_object_is_listed() {
     let dir = tempfile::tempdir().unwrap();
-    let data = dir.path().join("hub-data");
+    let data = dir.path().join("registry-data");
     fs_interfaces::rpc::prepare_data_dir(&data).unwrap();
     let (deleted, kept);
     {
@@ -88,7 +88,7 @@ async fn at_start_a_mark_that_holds_takes_a_restored_copy_off() {
     drop(owner);
     env.hub.take().unwrap().stop().unwrap();
     {
-        let objects = TursoStore::open(env.dir.path().join("hub-data/objects.db"))
+        let objects = TursoStore::open(env.dir.path().join("registry-data/objects.db"))
             .await
             .unwrap();
         objects.put(o, "owner").await.unwrap();
@@ -106,7 +106,7 @@ async fn at_start_a_mark_that_holds_takes_a_restored_copy_off() {
 async fn a_data_directory_others_can_reach_is_refused() {
     use std::os::unix::fs::PermissionsExt;
     let dir = tempfile::tempdir().unwrap();
-    let data = dir.path().join("hub-data");
+    let data = dir.path().join("registry-data");
     std::fs::create_dir_all(&data).unwrap();
     std::fs::set_permissions(&data, PermissionsExt::from_mode(0o755)).unwrap();
     assert!(Daemon::spawn(config(&dir)).is_err());

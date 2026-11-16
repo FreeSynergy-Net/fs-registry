@@ -11,7 +11,10 @@ use fs_objects::{ActivityFilter, TursoStore};
 #[tokio::test]
 async fn a_replay_after_a_crash_overwrites_nothing() {
     let dir = tempfile::tempdir().unwrap();
-    let (socket, data) = (dir.path().join("hub.sock"), dir.path().join("hub-data"));
+    let (socket, data) = (
+        dir.path().join("registry.sock"),
+        dir.path().join("registry-data"),
+    );
     let hub = start(&socket, &data);
     let (a, b) = (connect(&socket, "a").await, connect(&socket, "b").await);
     let a_store = TursoStore::open(dir.path().join("a.db")).await.unwrap();
