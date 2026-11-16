@@ -774,7 +774,7 @@ dependencies = [
 
 [[package]]
 name = "fs-registry"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "async-trait",
  "capnp",
@@ -799,7 +799,7 @@ dependencies = [
 
 [[package]]
 name = "fs-registry-client"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "capnp",
  "capnp-rpc",
@@ -816,7 +816,7 @@ dependencies = [
 
 [[package]]
 name = "fs-registry-e2e"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "capnp",
  "capnp-rpc",
@@ -839,7 +839,7 @@ dependencies = [
 
 [[package]]
 name = "fs-registry-proto"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "capnp",
  "chrono",
