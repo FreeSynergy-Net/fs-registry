@@ -1,8 +1,8 @@
-# FreeSynergy Hub — let the programs find each other
+# FreeSynergy Registry — let the programs find each other
 
 **This is a building block, and it is why your calendar can know your contacts without either one owning the other.**
 
-FreeSynergy Hub is one small background program per device. FreeSynergy programs do not look for each other, they only look for the hub. The hub collects the objects that programs choose to share, tells each program what happened in the others, and proposes matches, such as "these two contacts look like the same person".
+FreeSynergy Registry is one small background program per device. FreeSynergy programs do not look for each other, they only look for the registry (the "hub" in older texts and in the wire contract). The registry collects the objects that programs choose to share, tells each program what happened in the others, and proposes matches, such as "these two contacts look like the same person".
 
 What is different here: every program works alone without the hub and hands its changes over later. A program only sees the kinds of objects it declared it wants to read. Sensitive data is never collected, and an older copy at the hub is deleted if an object becomes sensitive. Nothing leaves your device through the hub today; it talks over a local socket only.
 
@@ -16,7 +16,7 @@ Latest tag: `v0.0.1`.
 - Same-person proposals between contact cards of different programs (shared e-mail or phone).
 - A client library with a "hub absent" state, so a program just keeps working when no hub runs.
 - Tested end to end with the real people, tasks and calendar servers, including large transfers and restarts.
-- Example: `cargo run -p fs-hub --example two_programs`.
+- Example: `cargo run -p fs-registry --example two_programs`.
 
 ## What is not there yet
 
@@ -30,12 +30,12 @@ Latest tag: `v0.0.1`.
 
 ## Part of FreeSynergy
 
-The hub is the connector in the middle of the programs. FreeSynergy is a family of programs that are free for everyone, forever, and that keep your data yours. The documentation, the manifesto and the overall plan live in [fs-documentation](https://github.com/FreeSynergy/fs-documentation); the reading version is at <https://freesynergy.github.io/fs-documentation/>. Start with the [manifesto](https://freesynergy.github.io/fs-documentation/manifesto/) if you want to know why we do this.
+The registry is the connector in the middle of the programs. FreeSynergy is a family of programs that are free for everyone, forever, and that keep your data yours. The documentation, the manifesto and the overall plan live in [fs-documentation](https://github.com/FreeSynergy/fs-documentation); the reading version is at <https://freesynergy.github.io/fs-documentation/>. Start with the [manifesto](https://freesynergy.github.io/fs-documentation/manifesto/) if you want to know why we do this.
 
 
 ## For developers
 
-- Workspace crates: `fs-hub-proto` (re-exports the contract), `fs-hub` (daemon and library), `fs-hub-client`, `fs-hub-e2e` (multi-program tests).
+- Workspace crates: `fs-registry-proto` (re-exports the contract), `fs-registry` (daemon and library), `fs-registry-client`, `fs-registry-e2e` (multi-program tests).
 - The contract is `hub.capnp` in [fs-interfaces](https://github.com/FreeSynergy/fs-interfaces) (draft). Hub owns it. Needs Rust 1.89.
 - Build and test: `cargo build --workspace` and `cargo test --workspace`.
 - Design, limits and open questions: [DESIGN.md](DESIGN.md).

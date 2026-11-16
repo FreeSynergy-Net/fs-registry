@@ -694,85 +694,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fs-hub"
-version = "0.0.1"
-dependencies = [
- "async-trait",
- "capnp",
- "capnp-rpc",
- "chrono",
- "fs-calendar-core",
- "fs-hub-client",
- "fs-hub-proto",
- "fs-interfaces",
- "fs-objects",
- "fs-people-core",
- "futures",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tokio-util",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "fs-hub-client"
-version = "0.0.1"
-dependencies = [
- "capnp",
- "capnp-rpc",
- "chrono",
- "fs-hub-proto",
- "fs-interfaces",
- "fs-objects",
- "futures",
- "serde_json",
- "thiserror",
- "tokio",
- "tokio-util",
-]
-
-[[package]]
-name = "fs-hub-e2e"
-version = "0.0.1"
-dependencies = [
- "capnp",
- "capnp-rpc",
- "chrono",
- "fs-calendar-core",
- "fs-calendar-server",
- "fs-hub",
- "fs-hub-client",
- "fs-interfaces",
- "fs-objects",
- "fs-people-core",
- "fs-people-server",
- "fs-tasks-core",
- "fs-tasks-server",
- "serde_json",
- "tempfile",
- "tokio",
- "uuid",
-]
-
-[[package]]
-name = "fs-hub-proto"
-version = "0.0.1"
-dependencies = [
- "capnp",
- "chrono",
- "fs-interfaces",
- "fs-objects",
- "serde",
- "serde_json",
- "thiserror",
- "uuid",
-]
-
-[[package]]
 name = "fs-interfaces"
 version = "0.0.1"
 source = "git+https://github.com/FreeSynergy/fs-interfaces?tag=v0.0.1#9f2d3a0626d7382b478c754eb31834146188dfab"
@@ -849,6 +770,85 @@ dependencies = [
  "fs-objects",
  "fs-people-core",
  "serde_json",
+]
+
+[[package]]
+name = "fs-registry"
+version = "0.0.1"
+dependencies = [
+ "async-trait",
+ "capnp",
+ "capnp-rpc",
+ "chrono",
+ "fs-calendar-core",
+ "fs-interfaces",
+ "fs-objects",
+ "fs-people-core",
+ "fs-registry-client",
+ "fs-registry-proto",
+ "futures",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "fs-registry-client"
+version = "0.0.1"
+dependencies = [
+ "capnp",
+ "capnp-rpc",
+ "chrono",
+ "fs-interfaces",
+ "fs-objects",
+ "fs-registry-proto",
+ "futures",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
+name = "fs-registry-e2e"
+version = "0.0.1"
+dependencies = [
+ "capnp",
+ "capnp-rpc",
+ "chrono",
+ "fs-calendar-core",
+ "fs-calendar-server",
+ "fs-interfaces",
+ "fs-objects",
+ "fs-people-core",
+ "fs-people-server",
+ "fs-registry",
+ "fs-registry-client",
+ "fs-tasks-core",
+ "fs-tasks-server",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
+name = "fs-registry-proto"
+version = "0.0.1"
+dependencies = [
+ "capnp",
+ "chrono",
+ "fs-interfaces",
+ "fs-objects",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "uuid",
 ]
 
 [[package]]

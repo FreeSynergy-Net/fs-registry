@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/fs-hub-proto", "crates/fs-hub", "crates/fs-hub-client", "crates/fs-hub-e2e"]
+members = ["crates/fs-registry-proto", "crates/fs-registry", "crates/fs-registry-client", "crates/fs-registry-e2e"]
 
 [workspace.package]
 version = "0.0.1"
@@ -11,7 +11,7 @@ rust-version = "1.89"
 [workspace.dependencies]
 fs-objects = { git = "https://github.com/FreeSynergy/fs-objects", tag = "v0.0.1" }
 fs-interfaces = { git = "https://github.com/FreeSynergy/fs-interfaces", tag = "v0.0.1", features = ["rpc"] }
-fs-hub-proto = { path = "crates/fs-hub-proto" }
+fs-registry-proto = { path = "crates/fs-registry-proto" }
 capnp = "0.27"
 capnp-rpc = "0.27"
 tokio = { version = "1", features = ["rt", "net", "sync", "macros", "time", "io-util", "signal"] }
