@@ -11,11 +11,11 @@
 #              `fs-registry-e2e::<file>`): each starts a real hub on a real socket in a temp dir (`Env`, Daemon), some start the
 #              real binary as a child process (`memory`, `crash_replay`). Unit tests inside `src/` of any crate and the tests of
 #              `fs-registry-proto` / `fs-registry-client` are pure model tests: level quick.
-#   time     : file uses sleep / waits for a feed on a clock: `original_time`, `lag`, `ended`, plus the child-process starters
+#   time     : file uses sleep or waits on a clock: `original_time`, `lag`, `ended`, the e2e stories `purge`, `purge_mark`, `purge_foreign_mark`, `purge_sync` (they read the feed until it is 700 ms quiet, then count) and `redacted` (waits to see nothing arrive), plus the child-process starters
 #              `memory`, `crash_replay` (they poll for the socket every 50 ms). New timing test: put `time` or `lag` in the file name.
 #   security : privacy and rights: file name contains `privacy`, `purge`, `mark_rights`, `mark_owner`, `sensitive_marks`, `redact`,
 #              `never_read`, `blanked_fields`, `owner_fields`, `refusal`, `relationship`, `envelope_only`; and the unit tests whose
-#              name says `redacted`, `sensitive`, `visible_to_nobody`, `blanking`, `cannot_be_read`.
+#              name says `redacted`, `sensitive`, `visible_to_nobody`, `blanking`, `cannot_be_read`, `others_can_reach` (data directory others can reach is refused), `no_right` (no right to ack), `third_program_cannot` (a third program cannot lift a mark).
 #   everything else = unit / model test: level quick.
 # Binary ids look like `<crate>::<test-file>` (unit tests: `<crate>`).
 
@@ -24,21 +24,21 @@ fail-fast = false
 
 # Level 1: unit and model tests only. No hub/socket/child-process, timing or security tests; stops at the first failure.
 [profile.quick]
-default-filter = "not (binary_id(/^fs-registry(-e2e)?::/) | binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read/))"
+default-filter = "not (binary_id(/^fs-registry(-e2e)?::/) | binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read|others_can_reach|no_right|third_program_cannot/))"
 fail-fast = true
 retries = 0
 slow-timeout = { period = "30s", terminate-after = 4 }
 
 # Level 2: timing tests. The 10x rule: run with `--stress-count 10`; a flaky test is an error, so NO retries hide it.
 [profile.time]
-default-filter = "binary_id(/::(original_time|lag|ended|memory|crash_replay)$/)"
+default-filter = "binary_id(/::(original_time|lag|ended|memory|crash_replay|purge|purge_mark|purge_foreign_mark|purge_sync|redacted)$/)"
 fail-fast = false
 retries = 0
 slow-timeout = { period = "60s", terminate-after = 5 }
 
 # Security: privacy (what must stay home), marks, redaction, rights. Full run before a release (CLAUDE.md §4 hard limit 2).
 [profile.security]
-default-filter = "binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read/)"
+default-filter = "binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read|others_can_reach|no_right|third_program_cannot/)"
 fail-fast = false
 retries = 0
 slow-timeout = { period = "60s", terminate-after = 5 }
