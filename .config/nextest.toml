@@ -1,0 +1,57 @@
+# cargo-nextest profiles for fs-registry (workflow testlauf, CLAUDE.md §4: little but often).
+# Checked with `cargo nextest list --workspace --all-features --profile P --message-format oneline` (counts in the commit message).
+#
+# Run:  cargo nextest run -p <crate> --profile <quick|time|security|platform|release>
+# Levels: `quick` while working on a finished module (seconds); `time` for the 10x rule (add --stress-count 10);
+# `security` for privacy / marks / redaction / rights before a release; `platform` for the tests that run a real hub
+# (socket, child process); `release` = everything (CI only). There is no picture level: the repo draws nothing.
+#
+# NAME CONVENTION (the filtersets below read it; a new test follows it so it lands in the right level):
+#   platform : every test file of crate `fs-registry` and `fs-registry-e2e` (`tests/*.rs`, binary id `fs-registry::<file>` /
+#              `fs-registry-e2e::<file>`): each starts a real hub on a real socket in a temp dir (`Env`, Daemon), some start the
+#              real binary as a child process (`memory`, `crash_replay`). Unit tests inside `src/` of any crate and the tests of
+#              `fs-registry-proto` / `fs-registry-client` are pure model tests: level quick.
+#   time     : file uses sleep / waits for a feed on a clock: `original_time`, `lag`, `ended`, plus the child-process starters
+#              `memory`, `crash_replay` (they poll for the socket every 50 ms). New timing test: put `time` or `lag` in the file name.
+#   security : privacy and rights: file name contains `privacy`, `purge`, `mark_rights`, `mark_owner`, `sensitive_marks`, `redact`,
+#              `never_read`, `blanked_fields`, `owner_fields`, `refusal`, `relationship`, `envelope_only`; and the unit tests whose
+#              name says `redacted`, `sensitive`, `visible_to_nobody`, `blanking`, `cannot_be_read`.
+#   everything else = unit / model test: level quick.
+# Binary ids look like `<crate>::<test-file>` (unit tests: `<crate>`).
+
+[profile.default]
+fail-fast = false
+
+# Level 1: unit and model tests only. No hub/socket/child-process, timing or security tests; stops at the first failure.
+[profile.quick]
+default-filter = "not (binary_id(/^fs-registry(-e2e)?::/) | binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read/))"
+fail-fast = true
+retries = 0
+slow-timeout = { period = "30s", terminate-after = 4 }
+
+# Level 2: timing tests. The 10x rule: run with `--stress-count 10`; a flaky test is an error, so NO retries hide it.
+[profile.time]
+default-filter = "binary_id(/::(original_time|lag|ended|memory|crash_replay)$/)"
+fail-fast = false
+retries = 0
+slow-timeout = { period = "60s", terminate-after = 5 }
+
+# Security: privacy (what must stay home), marks, redaction, rights. Full run before a release (CLAUDE.md §4 hard limit 2).
+[profile.security]
+default-filter = "binary_id(/::(privacy|purge\\w*|mark_rights|mark_owner|sensitive_marks|redact\\w*|never_read|blanked_fields|owner_fields|refusal|relationship|envelope_only)$/) | test(/redacted|sensitive|visible_to_nobody|blanking|cannot_be_read/)"
+fail-fast = false
+retries = 0
+slow-timeout = { period = "60s", terminate-after = 5 }
+
+# Platform differences (Linux vs Windows): real hub on a real socket, real binary as a child process.
+[profile.platform]
+default-filter = "binary_id(/^fs-registry(-e2e)?::/)"
+fail-fast = false
+retries = 0
+slow-timeout = { period = "60s", terminate-after = 5 }
+
+# Everything (release gate, CI): no filter, no retries, no fail-fast so the whole list of failures is seen.
+[profile.release]
+fail-fast = false
+retries = 0
+slow-timeout = { period = "60s", terminate-after = 10 }
